@@ -1,0 +1,16 @@
+{
+  "name": "decodebrief",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check-resolutions": "python3 scripts/check-resolutions.py"
+  },
+  "dependencies": {
+    "astro": "^4.16.0"
+  }
+}

@@ -1,0 +1,52 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1200" height="760" fill="#FBFAF6"/>
+
+  <text x="80" y="78" font-size="34" font-weight="600" fill="#26251F">Five fields, split by what can be known</text>
+  <text x="80" y="116" font-size="18" fill="#75746C">The machine handles the recoverable parts. The human handles the one irreplaceable part.</text>
+
+  <!-- Row 1 -->
+  <g>
+    <rect x="80" y="160" width="1040" height="78" rx="12" fill="#E6F1FB" stroke="#A9CBEF" stroke-width="1.3"/>
+    <text x="118" y="205" font-size="22" font-weight="600" fill="#0C447C">What changed</text>
+    <rect x="870" y="178" width="216" height="42" rx="21" fill="#378ADD"/>
+    <text x="978" y="205" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Agent extracts</text>
+  </g>
+
+  <!-- Row 2 -->
+  <g>
+    <rect x="80" y="252" width="1040" height="78" rx="12" fill="#E6F1FB" stroke="#A9CBEF" stroke-width="1.3"/>
+    <text x="118" y="297" font-size="22" font-weight="600" fill="#0C447C">How it was done</text>
+    <rect x="870" y="270" width="216" height="42" rx="21" fill="#378ADD"/>
+    <text x="978" y="297" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Agent extracts</text>
+  </g>
+
+  <!-- Row 3 -->
+  <g>
+    <rect x="80" y="344" width="1040" height="78" rx="12" fill="#EAF3FB" stroke="#A9CBEF" stroke-width="1.3"/>
+    <text x="118" y="389" font-size="22" font-weight="600" fill="#0C447C">Technical result</text>
+    <rect x="870" y="362" width="216" height="42" rx="21" fill="#5B9FE0"/>
+    <text x="978" y="389" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Agent, if verifiable</text>
+  </g>
+
+  <!-- Row 4 — the irreplaceable one -->
+  <g>
+    <rect x="80" y="436" width="1040" height="78" rx="12" fill="#FAEEDA" stroke="#BA7517" stroke-width="2.2"/>
+    <rect x="80" y="436" width="7" height="78" rx="3.5" fill="#BA7517"/>
+    <text x="118" y="473" font-size="22" font-weight="600" fill="#633806">Why / what-for</text>
+    <text x="118" y="498" font-size="14.5" fill="#854F0B">agent proposes a draft — a human confirms it</text>
+    <rect x="870" y="454" width="216" height="42" rx="21" fill="#BA7517"/>
+    <text x="978" y="481" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Human confirms</text>
+  </g>
+
+  <!-- Row 5 -->
+  <g>
+    <rect x="80" y="528" width="1040" height="78" rx="12" fill="#FCF4E5" stroke="#E7C588" stroke-width="1.3"/>
+    <text x="118" y="573" font-size="22" font-weight="600" fill="#633806">Business result</text>
+    <rect x="870" y="546" width="216" height="42" rx="21" fill="#D29A3B"/>
+    <text x="978" y="573" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Human, optional</text>
+  </g>
+
+  <!-- caption -->
+  <text x="80" y="664" font-size="18" fill="#56554F">The agent never asserts the <tspan font-weight="600" fill="#633806">why</tspan> — it can only guess. So it drafts a proposal and a</text>
+  <text x="80" y="692" font-size="18" fill="#56554F">human confirms it in seconds. That single step is what makes the record trustworthy.</text>
+</svg>

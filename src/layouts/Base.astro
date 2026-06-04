@@ -1,0 +1,239 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "Your team's decision journal, powered by AI." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:          #0c0e14;
+        --surface:     #13151f;
+        --surface-2:   #1a1d2a;
+        --border:      #252836;
+        --border-2:    #2e3147;
+        --text:        #dde1f0;
+        --muted:       #6b7190;
+        --accent:      #6e56cf;
+        --accent-2:    #9b8afb;
+        --accent-dim:  #2d2455;
+        --green:       #22c55e;
+        --yellow:      #facc15;
+        --red:         #f87171;
+        --mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      /* ── NAV ── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(12, 14, 20, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+      nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+      }
+      .brand {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--text);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+      }
+      .brand span { color: var(--accent-2); }
+      .nav-links {
+        display: flex;
+        gap: 1.75rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.15s;
+      }
+      .nav-links a:hover { color: var(--text); }
+      .nav-cta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .btn-nav-ghost {
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .btn-nav-ghost:hover { color: var(--text); }
+      .btn-nav {
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.45rem 1.1rem;
+        border-radius: 6px;
+        transition: opacity 0.15s;
+      }
+      .btn-nav:hover { opacity: 0.88; }
+
+      /* ── CONTENT ── */
+      main {
+        overflow: hidden;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      footer a { color: var(--muted); text-decoration: none; }
+      footer a:hover { color: var(--text); }
+
+      /* ── RESOLUTION LOG PAGES ── */
+      .log-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 3.5rem 2rem 6rem;
+      }
+      .log-page h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+      .log-page .subtitle { color: var(--muted); margin-bottom: 2.5rem; }
+      .log-page h2 { font-size: 1.2rem; margin: 1.75rem 0 0.5rem; }
+      .log-page p  { margin-bottom: 0.9rem; }
+      .log-page ul, .log-page ol { padding-left: 1.5rem; margin-bottom: 0.9rem; }
+      .log-page li { margin-bottom: 0.3rem; }
+      .log-page a  { color: var(--accent-2); text-decoration: none; }
+      .log-page a:hover { text-decoration: underline; }
+      .log-page pre, .log-page code { font-family: var(--mono); font-size: 0.84rem; }
+      .log-page pre {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.25rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+      .log-page code:not(pre code) {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.15em 0.4em;
+      }
+      .log-page table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+      .log-page th {
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .log-page td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
+      .log-page blockquote {
+        border-left: 3px solid var(--accent-dim);
+        padding-left: 1rem;
+        color: var(--muted);
+        margin: 1rem 0;
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+
+      /* ── BADGES ── */
+      .badge {
+        display: inline-block;
+        padding: 0.2em 0.65em;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .badge-confirmed  { background: #14532d; color: var(--green); }
+      .badge-needs      { background: #3d2200; color: var(--yellow); }
+      .badge-draft      { background: var(--surface-2); color: var(--muted); }
+
+      /* ── CARD (log) ── */
+      .log-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 0.75rem;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: border-color 0.15s;
+      }
+      .log-card:hover { border-color: var(--accent-dim); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="nav-left">
+          <a class="brand" href="/">Chronicle<span>.</span></a>
+          <ul class="nav-links">
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How it works</a></li>
+            <li><a href="/resolutions">Resolution log</a></li>
+          </ul>
+        </div>
+        <div class="nav-cta">
+          <a class="btn-nav-ghost" href="#">Sign in</a>
+          <a class="btn-nav" href="#">Get started</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>
+        Chronicle · decodebrief ·
+        <a href="https://github.com">GitHub</a> ·
+        <a href="/resolutions">Resolution log</a>
+      </p>
+    </footer>
+  </body>
+</html>

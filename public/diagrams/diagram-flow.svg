@@ -1,0 +1,54 @@
+<svg width="1200" height="540" viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#8a8980" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="540" fill="#FBFAF6"/>
+
+  <text x="54" y="74" font-size="34" font-weight="600" fill="#26251F">Capture the why, at the moment of resolution</text>
+  <text x="54" y="110" font-size="18" fill="#75746C">An agent drafts what it can verify. A human confirms the one thing it can't.</text>
+
+  <g>
+    <rect x="852" y="178" width="162" height="40" rx="20" fill="#FBEAF0" stroke="#D4537E" stroke-width="1.4"/>
+    <text x="933" y="203" font-size="16" font-weight="600" fill="#72243E" text-anchor="middle">merge gate</text>
+    <path d="M933 218 L933 240" stroke="#D4537E" stroke-width="1.4" fill="none"/>
+  </g>
+
+  <g>
+    <rect x="54" y="248" width="204" height="88" rx="12" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1.4"/>
+    <text x="156" y="288" font-size="17" font-weight="600" fill="#2C2C2A" text-anchor="middle">Commit freely</text>
+    <text x="156" y="312" font-size="13.5" fill="#75746C" text-anchor="middle">no gate on commits</text>
+  </g>
+  <line x1="260" y1="292" x2="272" y2="292" stroke="#8a8980" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="276" y="248" width="204" height="88" rx="12" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="1.4"/>
+    <text x="378" y="288" font-size="17" font-weight="600" fill="#2C2C2A" text-anchor="middle">Open the PR</text>
+    <text x="378" y="312" font-size="13.5" fill="#75746C" text-anchor="middle">wrap up the change</text>
+  </g>
+  <line x1="482" y1="292" x2="494" y2="292" stroke="#8a8980" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="498" y="248" width="204" height="88" rx="12" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6"/>
+    <text x="600" y="288" font-size="17" font-weight="600" fill="#0C447C" text-anchor="middle">Agent drafts record</text>
+    <text x="600" y="312" font-size="13.5" fill="#185FA5" text-anchor="middle">what &#183; how &#183; result &#183; why</text>
+  </g>
+  <line x1="704" y1="292" x2="716" y2="292" stroke="#8a8980" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="720" y="248" width="204" height="88" rx="12" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.6"/>
+    <text x="822" y="288" font-size="17" font-weight="600" fill="#633806" text-anchor="middle">Human confirms why</text>
+    <text x="822" y="312" font-size="13.5" fill="#854F0B" text-anchor="middle">~15 seconds, one line</text>
+  </g>
+  <line x1="926" y1="292" x2="938" y2="292" stroke="#8a8980" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="942" y="248" width="204" height="88" rx="12" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1.6"/>
+    <text x="1044" y="288" font-size="17" font-weight="600" fill="#085041" text-anchor="middle">Durable record</text>
+    <text x="1044" y="312" font-size="13.5" fill="#0F6E56" text-anchor="middle">committed, kept</text>
+  </g>
+
+  <text x="54" y="430" font-size="17" fill="#56554F">Gate the <tspan font-weight="600" fill="#72243E">merge</tspan> &#8212; never the commit. Trivial PRs (<tspan font-weight="600">chore</tspan> / <tspan font-weight="600">no-spec</tspan>) skip the record entirely.</text>
+  <text x="54" y="462" font-size="17" fill="#56554F"><tspan font-weight="600" fill="#0C447C">Blue</tspan> = the agent extracts it from the diff.  <tspan font-weight="600" fill="#633806">Amber</tspan> = the one thing only a human can confirm.</text>
+</svg>

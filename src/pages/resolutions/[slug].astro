@@ -1,0 +1,71 @@
+---
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const files = import.meta.glob("../../../docs/resolutions/*.md", { eager: true });
+  return Object.entries(files)
+    .filter(([p]) => !p.endsWith("README.md"))
+    .map(([p, mod]) => ({
+      params: { slug: p.split("/").pop()!.replace(".md", "") },
+      props: { mod },
+    }));
+}
+
+const { slug } = Astro.params;
+const { mod } = Astro.props as { mod: any };
+const fm = mod.frontmatter ?? {};
+const Content = mod.default;
+
+function badgeClass(s?: string) {
+  if (s === "confirmed") return "badge badge-confirmed";
+  if (s === "needs-confirmation") return "badge badge-needs";
+  return "badge badge-draft";
+}
+---
+
+<Base title={`${slug} — Resolution Log`}>
+  <div class="log-page">
+    <div style="margin-bottom:2rem;">
+      <a href="/resolutions" style="color:var(--muted); font-size:0.875rem; text-decoration:none;">
+        ← Back to log
+      </a>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:0.85rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+      <span class={badgeClass(fm.status)}>{fm.status ?? "draft"}</span>
+      {fm.date && <span style="color:var(--muted); font-size:0.875rem;">{fm.date}</span>}
+      {fm.pr && <span style="color:var(--muted); font-size:0.875rem;">PR {fm.pr}</span>}
+      {fm.work_item && <span style="color:var(--muted); font-size:0.875rem;">Item: {fm.work_item}</span>}
+    </div>
+
+    {fm.author && (
+      <p style="color:var(--muted); font-size:0.83rem; margin-bottom:2.5rem;">
+        Why confirmed by <strong style="color:var(--text);">{fm.author}</strong>
+      </p>
+    )}
+
+    <article>
+      <Content />
+    </article>
+
+    <hr class="divider" />
+    <p style="color:var(--muted); font-size:0.78rem;">
+      <code>docs/resolutions/{slug}.md</code>
+    </p>
+  </div>
+</Base>
+
+<style is:global>
+  .log-page article h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.25rem; color: #fff; }
+  .log-page article h2 {
+    font-size: 1.05rem; font-weight: 600; margin: 2rem 0 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--muted); font-size: 0.78rem;
+  }
+  .log-page article h2::before { content: ""; display: block; border-top: 1px solid var(--border); margin-bottom: 1.25rem; }
+  .log-page article p { margin-bottom: 0.85rem; color: var(--text); }
+  .log-page article ul, .log-page article ol { padding-left: 1.5rem; margin-bottom: 0.85rem; }
+  .log-page article li { margin-bottom: 0.3rem; }
+  .log-page article strong { color: #fff; font-weight: 600; }
+  .log-page article em { color: var(--accent-2); font-style: normal; }
+</style>

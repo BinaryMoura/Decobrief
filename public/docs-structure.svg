@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460">
+
+  <defs>
+    <marker id="arr-p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#6e56cf"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+    </marker>
+  </defs>
+
+  <!-- ── BACKGROUND ── -->
+  <rect width="760" height="460" rx="14" fill="#0c0e14"/>
+
+  <!-- ── TITLE ── -->
+  <text x="40" y="22" fill="#6b7190" font-size="11"
+        font-family="system-ui,-apple-system,sans-serif">docs/ — project structure</text>
+
+  <!-- ── DIVIDER ── -->
+  <line x1="350" y1="30" x2="350" y2="440" stroke="#1a1d2a" stroke-width="1.5"/>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  LEFT: FILE TREE                          -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- docs/ FOLDER (y 37–85) -->
+  <rect x="35" y="37" width="65" height="12" rx="2" fill="#1e1408" stroke="#c4862d" stroke-width="1.5"/>
+  <rect x="35" y="47" width="208" height="38" rx="5" fill="#1e1408" stroke="#c4862d" stroke-width="1.5"/>
+  <line x1="50" y1="62" x2="158" y2="62" stroke="#3d2e15" stroke-width="1.5"/>
+  <line x1="50" y1="73" x2="132" y2="73" stroke="#3d2e15" stroke-width="1.5"/>
+  <text x="52" y="73" fill="#c4862d" font-size="14" font-weight="700"
+        font-family="'JetBrains Mono',ui-monospace,monospace">docs/</text>
+
+  <!-- Main trunk (dashed) -->
+  <line x1="63" y1="85" x2="63" y2="415"
+        stroke="#252836" stroke-width="2" stroke-dasharray="4,3"/>
+
+  <!-- ── ① task-problem.md  (center y=148) ── -->
+  <line x1="63" y1="148" x2="90" y2="148" stroke="#252836" stroke-width="2"/>
+  <!-- file icon: notched body + fold triangle -->
+  <polygon points="90,133 106,133 116,143 116,163 90,163"
+           fill="#13151f" stroke="#2e3147" stroke-width="1.5"/>
+  <polygon points="106,133 116,133 116,143"
+           fill="#1e2030" stroke="#2e3147" stroke-width="1"/>
+  <!-- badge -->
+  <circle cx="90" cy="133" r="9" fill="#6e56cf"/>
+  <text x="90" y="137.5" fill="white" font-size="10" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">1</text>
+  <!-- filename -->
+  <text x="125" y="152" fill="#dde1f0" font-size="12.5"
+        font-family="'JetBrains Mono',ui-monospace,monospace">task-problem.md</text>
+
+  <!-- ── ② fix-spec.md  (center y=225) ── -->
+  <line x1="63" y1="225" x2="90" y2="225" stroke="#252836" stroke-width="2"/>
+  <polygon points="90,210 106,210 116,220 116,240 90,240"
+           fill="#13151f" stroke="#2e3147" stroke-width="1.5"/>
+  <polygon points="106,210 116,210 116,220"
+           fill="#1e2030" stroke="#2e3147" stroke-width="1"/>
+  <circle cx="90" cy="210" r="9" fill="#6e56cf"/>
+  <text x="90" y="214.5" fill="white" font-size="10" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">2</text>
+  <text x="125" y="229" fill="#dde1f0" font-size="12.5"
+        font-family="'JetBrains Mono',ui-monospace,monospace">fix-spec.md</text>
+
+  <!-- ── resolutions/ FOLDER  (center y=302) ── -->
+  <line x1="63" y1="302" x2="90" y2="302" stroke="#252836" stroke-width="2"/>
+  <rect x="90" y="289" width="55" height="11" rx="2" fill="#1e1408" stroke="#c4862d" stroke-width="1.5"/>
+  <rect x="90" y="298" width="160" height="32" rx="4" fill="#1e1408" stroke="#c4862d" stroke-width="1.5"/>
+  <text x="106" y="318" fill="#c4862d" font-size="12.5" font-weight="600"
+        font-family="'JetBrains Mono',ui-monospace,monospace">resolutions/</text>
+
+  <!-- Sub-trunk -->
+  <line x1="108" y1="330" x2="108" y2="405"
+        stroke="#252836" stroke-width="2" stroke-dasharray="4,3"/>
+
+  <!-- ── ③ RES-002-….md  (center y=405) ── -->
+  <line x1="108" y1="405" x2="135" y2="405" stroke="#252836" stroke-width="2"/>
+  <!-- file icon: green border (it's output) -->
+  <polygon points="135,390 151,390 161,400 161,420 135,420"
+           fill="#0f1f14" stroke="#22c55e" stroke-width="1.5"/>
+  <polygon points="151,390 161,390 161,400"
+           fill="#0c1a10" stroke="#22c55e" stroke-width="1"/>
+  <!-- badge green -->
+  <circle cx="135" cy="390" r="9" fill="#22c55e"/>
+  <text x="135" y="394.5" fill="#0c0e14" font-size="10" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">3</text>
+  <!-- filename -->
+  <text x="169" y="408" fill="#dde1f0" font-size="12.5"
+        font-family="'JetBrains Mono',ui-monospace,monospace">RES-002-….md</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  ARROWS (dashed bezier)                   -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- ① task-problem → card 1 -->
+  <path d="M 250,148 C 298,148 328,152 358,152"
+        stroke="#6e56cf" stroke-width="1.5" fill="none"
+        stroke-dasharray="5,2" marker-end="url(#arr-p)"/>
+
+  <!-- ② fix-spec → card 2 -->
+  <path d="M 222,225 C 272,225 318,240 358,240"
+        stroke="#6e56cf" stroke-width="1.5" fill="none"
+        stroke-dasharray="5,2" marker-end="url(#arr-p)"/>
+
+  <!-- ③ RES-002 → card 3 -->
+  <path d="M 278,405 C 318,405 344,412 358,412"
+        stroke="#22c55e" stroke-width="1.5" fill="none"
+        stroke-dasharray="5,2" marker-end="url(#arr-g)"/>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  RIGHT: DESCRIPTION CARDS                 -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- Card ① – Bug ticket (y 112–192) -->
+  <rect x="362" y="112" width="384" height="82" rx="8"
+        fill="#13151f" stroke="#252836" stroke-width="1.5"/>
+  <rect x="362" y="112" width="4" height="82" rx="2" fill="#6e56cf"/>
+  <circle cx="384" cy="133" r="10" fill="#6e56cf"/>
+  <text x="384" y="137.5" fill="white" font-size="10.5" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">1</text>
+  <text x="402" y="136" fill="#dde1f0" font-size="13" font-weight="700"
+        font-family="system-ui,-apple-system,sans-serif">Bug ticket</text>
+  <text x="402" y="156" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">Describes the misalignment issue, reproduction</text>
+  <text x="402" y="173" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">steps, root cause, and acceptance criteria.</text>
+
+  <!-- Card ② – Fix specification (y 202–282) -->
+  <rect x="362" y="202" width="384" height="82" rx="8"
+        fill="#13151f" stroke="#252836" stroke-width="1.5"/>
+  <rect x="362" y="202" width="4" height="82" rx="2" fill="#6e56cf"/>
+  <circle cx="384" cy="223" r="10" fill="#6e56cf"/>
+  <text x="384" y="227.5" fill="white" font-size="10.5" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">2</text>
+  <text x="402" y="226" fill="#dde1f0" font-size="13" font-weight="700"
+        font-family="system-ui,-apple-system,sans-serif">Fix specification</text>
+  <text x="402" y="246" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">Proposed CSS approach, rationale, what not</text>
+  <text x="402" y="263" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">to do, and a testing checklist.</text>
+
+  <!-- Folder label in the gap (y ≈ 318) -->
+  <text x="362" y="318" fill="#c4862d" font-size="10.5"
+        font-family="'JetBrains Mono',ui-monospace,monospace">resolutions/</text>
+  <text x="449" y="318" fill="#6b7190" font-size="10.5"
+        font-family="system-ui,-apple-system,sans-serif">— written by the agent after the fix</text>
+
+  <!-- Card ③ – Resolution record (y 368–452, green) -->
+  <rect x="362" y="368" width="384" height="84" rx="8"
+        fill="#0f1f14" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.65"/>
+  <rect x="362" y="368" width="4" height="84" rx="2" fill="#22c55e"/>
+  <circle cx="384" cy="389" r="10" fill="#22c55e"/>
+  <text x="384" y="393.5" fill="#0c0e14" font-size="10.5" font-weight="700"
+        text-anchor="middle" font-family="system-ui,sans-serif">3</text>
+  <text x="402" y="392" fill="#dde1f0" font-size="13" font-weight="700"
+        font-family="system-ui,-apple-system,sans-serif">Resolution record</text>
+  <text x="402" y="412" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">Plain-language account of what was fixed and</text>
+  <text x="402" y="429" fill="#6b7190" font-size="11.5"
+        font-family="system-ui,-apple-system,sans-serif">why — confirmed by the team.</text>
+  <text x="402" y="446" fill="#22c55e" font-size="10.5"
+        font-family="'JetBrains Mono',ui-monospace,monospace">↳ status: confirmed</text>
+
+</svg>

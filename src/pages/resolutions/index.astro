@@ -1,0 +1,72 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const files = import.meta.glob("../../../docs/resolutions/*.md", { eager: true });
+
+type Record = {
+  slug: string;
+  fm: { work_item?: string; pr?: string; status?: string; author?: string; date?: string };
+};
+
+const records: Record[] = Object.entries(files)
+  .filter(([p]) => !p.endsWith("README.md"))
+  .map(([p, mod]) => ({
+    slug: p.split("/").pop()!.replace(".md", ""),
+    fm: (mod as any).frontmatter ?? {},
+  }))
+  .sort((a, b) => (b.fm.date ?? "").localeCompare(a.fm.date ?? ""));
+
+function badgeClass(s?: string) {
+  if (s === "confirmed") return "badge badge-confirmed";
+  if (s === "needs-confirmation") return "badge badge-needs";
+  return "badge badge-draft";
+}
+---
+
+<Base title="Resolution Log — Chronicle">
+  <div class="log-page">
+    <h1>Resolution Log</h1>
+    <p class="subtitle">
+      The permanent record of why changes were made — confirmed in plain
+      language at the moment each change was finished.
+    </p>
+
+    {
+      records.length === 0 ? (
+        <div style="text-align:center; padding: 4rem 0; color: var(--muted);">
+          <p style="font-size:2rem; margin-bottom:1rem;">📭</p>
+          <p>No resolution records yet.</p>
+          <p style="font-size:0.85rem;">
+            Run the agent after your next change to create the first one.
+          </p>
+        </div>
+      ) : (
+        records.map((r) => (
+          <a class="log-card" href={`/resolutions/${r.slug}`}>
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap;">
+              <span class={badgeClass(r.fm.status)}>{r.fm.status ?? "draft"}</span>
+              {r.fm.date && (
+                <span style="color:var(--muted); font-size:0.82rem;">{r.fm.date}</span>
+              )}
+              {r.fm.pr && (
+                <span style="color:var(--muted); font-size:0.82rem;">PR {r.fm.pr}</span>
+              )}
+            </div>
+            <strong style="font-size:0.95rem;">{r.slug.replace(/-/g, " ")}</strong>
+            {r.fm.author && (
+              <p style="color:var(--muted); font-size:0.8rem; margin:0.3rem 0 0;">
+                Confirmed by {r.fm.author}
+              </p>
+            )}
+          </a>
+        ))
+      )
+    }
+
+    <hr class="divider" />
+    <p style="color:var(--muted); font-size:0.82rem;">
+      Records live in <code>docs/resolutions/</code>. Ask the agent to write
+      one after any meaningful change.
+    </p>
+  </div>
+</Base>

@@ -1,0 +1,32 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ax" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#9c9b92" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1200" height="620" fill="#FBFAF6"/>
+
+  <text x="80" y="74" font-size="34" font-weight="600" fill="#26251F">The why has a shelf life</text>
+  <text x="80" y="112" font-size="18" fill="#75746C">Git keeps the what and the how forever. The reason behind the change fades within days.</text>
+
+  <rect x="186" y="150" width="96" height="330" fill="#FAEEDA" opacity="0.75"/>
+  <text x="234" y="176" font-size="15" font-weight="600" fill="#854F0B" text-anchor="middle">capture</text>
+  <text x="234" y="196" font-size="15" font-weight="600" fill="#854F0B" text-anchor="middle">window</text>
+
+  <line x1="186" y1="480" x2="1140" y2="480" stroke="#C9C7BD" stroke-width="2" marker-end="url(#ax)"/>
+  <line x1="186" y1="480" x2="186" y2="140" stroke="#C9C7BD" stroke-width="2"/>
+  <text x="1140" y="510" font-size="16" fill="#8a8980" text-anchor="end">time after the change &#8594;</text>
+  <text transform="translate(166,430) rotate(-90)" font-size="15" fill="#8a8980">how clearly it's known</text>
+
+  <line x1="186" y1="210" x2="1120" y2="210" stroke="#1D9E75" stroke-width="4"/>
+  <circle cx="186" cy="210" r="6" fill="#1D9E75"/>
+  <text x="1112" y="198" font-size="17" font-weight="600" fill="#0F6E56" text-anchor="end">what &amp; how &#8212; recoverable from git, always</text>
+
+  <path d="M186 200 C 376 430, 596 462, 1120 470" fill="none" stroke="#D85A30" stroke-width="4"/>
+  <circle cx="186" cy="200" r="6" fill="#D85A30"/>
+  <text x="396" y="350" font-size="17" font-weight="600" fill="#993C1D">why &amp; what-for &#8212; fades fast</text>
+
+  <text x="234" y="512" font-size="15" fill="#854F0B" text-anchor="middle">PR / wrap-up</text>
+
+  <text x="80" y="566" font-size="18" fill="#56554F">Capture the <tspan font-weight="600" fill="#993C1D">why</tspan> inside that early window &#8212; before it's gone and you're left doing archaeology.</text>
+</svg>

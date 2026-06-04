@@ -1,0 +1,400 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Chronicle — Your team's decision journal">
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Now in public beta</div>
+      <h1>Remember <em>why</em>,<br />not just what.</h1>
+      <p class="hero-sub">
+        Chronicle captures the reasoning behind every code change — at the only
+        moment it exists. AI drafts the record; your team confirms the why in
+        seconds.
+      </p>
+      <div class="hero-cta">
+        <a href="#features" class="btn-primary">See what it does</a>
+        <a href="/resolutions" class="btn-ghost">View resolution log →</a>
+      </div>
+      <div class="hero-proof">
+        <span>Used by engineering teams at</span>
+        <div class="logo-row">
+          <span class="logo-pill">Acme</span>
+          <span class="logo-pill">Vercel Co.</span>
+          <span class="logo-pill">Stackify</span>
+          <span class="logo-pill">Meridian</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <section class="section" id="how-it-works">
+    <div class="section-inner">
+      <div class="section-label">The workflow</div>
+      <h2>Three steps. Under 90 seconds.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Finish the change</h3>
+          <p>Merge a PR, close a ticket, or wrap up a session. The work is done.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Agent drafts the record</h3>
+          <p>
+            Chronicle reads the diff and writes what changed, how, and proposes
+            a plain-English why — verified from the code.
+          </p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>You confirm in one sentence</h3>
+          <p>
+            Read the draft. Say yes, or correct it. That is the only required
+            human step. Status set to confirmed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FEATURES — BUG IS HERE ─── -->
+  <!--
+    BUG: .feature-card is a block container with no flex column layout.
+    The .btn-card button has margin-top: 1.5rem, so it floats immediately
+    below the description text instead of anchoring to the card's bottom edge.
+    Cards with longer descriptions push the button further down, while cards
+    with shorter descriptions leave it near the middle — breaking horizontal
+    alignment across the three-column grid.
+  -->
+  <section class="section section-alt" id="features">
+    <div class="section-inner">
+      <div class="section-label">Features</div>
+      <h2>Everything your team needs</h2>
+      <p class="section-sub">
+        Stop losing the reasoning behind your decisions.
+      </p>
+
+      <div class="features-grid">
+        <!-- Card 1 — SHORT description -->
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>AI-drafted records</h3>
+          <p class="feature-desc">
+            The agent reads your diff and produces the record automatically.
+            No form to fill in.
+          </p>
+          <a href="#" class="btn-card">Get started</a>
+        </div>
+
+        <!-- Card 2 — MEDIUM description -->
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <h3>One human confirmation</h3>
+          <p class="feature-desc">
+            The agent proposes the <em>why</em> — you confirm or correct in
+            one sentence. Low friction by design, because the only way this
+            habit sticks is if it costs less than a minute per change.
+          </p>
+          <a href="#" class="btn-card">Get started</a>
+        </div>
+
+        <!-- Card 3 — LONG description -->
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Permanent, browsable log</h3>
+          <p class="feature-desc">
+            Every confirmed record lives alongside your code, forever. New team
+            members can trace any decision back to its origin without scheduling
+            a meeting with whoever made it — even years later. Your institutional
+            memory, finally written down in plain language instead of buried in
+            git history.
+          </p>
+          <a href="#" class="btn-card">Get started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── QUOTE ─── -->
+  <section class="section">
+    <div class="section-inner section-narrow">
+      <blockquote class="pullquote">
+        "Six months in, a new engineer joined and traced the entire auth
+        architecture to three Chronicle records — in fifteen minutes. That used
+        to take a week of meetings."
+      </blockquote>
+      <cite class="pullquote-cite">— Engineering lead, fintech startup</cite>
+    </div>
+  </section>
+
+  <!-- ─── FINAL CTA ─── -->
+  <section class="section section-cta">
+    <div class="section-inner section-narrow" style="text-align: center;">
+      <h2>Start capturing decisions today</h2>
+      <p class="section-sub">
+        Works with Claude Code, Cursor, GitHub Copilot, Windsurf — any AI
+        agent. No new tool to install.
+      </p>
+      <a href="#" class="btn-primary">Get started free</a>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  /* ── HERO ── */
+  .hero {
+    padding: 7rem 2rem 5rem;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-dim);
+    color: var(--accent-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3em 0.85em;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+    color: #fff;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent-2);
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 2.25rem;
+    line-height: 1.7;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3.5rem;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    transition: color 0.15s;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .hero-proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-proof > span {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .logo-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .logo-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.3em 0.9em;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 5rem 2rem;
+  }
+  .section-alt {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .section-cta {
+    padding-bottom: 7rem;
+  }
+  .section-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .section-narrow {
+    max-width: 640px;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-2);
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ── HOW IT WORKS STEPS ── */
+  .steps {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-top: 2.5rem;
+  }
+  .step {
+    flex: 1;
+  }
+  .step-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent-2);
+    margin-bottom: 0.75rem;
+    font-family: var(--mono);
+  }
+  .step h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .step p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .step-arrow {
+    color: var(--border-2);
+    font-size: 1.5rem;
+    padding-top: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .feature-card {
+    /*
+     * BUG: this element needs display: flex; flex-direction: column
+     * Without it, .btn-card cannot use margin-top: auto to anchor itself
+     * to the card's bottom edge — it just floats below the description text.
+     */
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+  .feature-icon {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .feature-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.6rem;
+  }
+  .feature-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .btn-card {
+    /*
+     * BUG: should be margin-top: auto (after making the parent a flex column)
+     * Currently uses a fixed top margin, so the button position depends on
+     * how much text is above it instead of anchoring to the card bottom.
+     */
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.55rem 1.25rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    border-radius: 7px;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .btn-card:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ── QUOTE ── */
+  .pullquote {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.7;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .pullquote-cite {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-left: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .steps { flex-direction: column; }
+    .step-arrow { transform: rotate(90deg); align-self: center; }
+  }
+</style>
