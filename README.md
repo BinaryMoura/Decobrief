@@ -1,4 +1,4 @@
-# decodebrief
+# Decodebrief
 
 > Decode every technical decision into plain language — for everyone who wasn't in the room.
 
