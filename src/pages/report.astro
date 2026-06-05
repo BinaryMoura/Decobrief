@@ -1,0 +1,772 @@
+---
+import Base from "../layouts/Base.astro";
+
+const files = import.meta.glob("../../docs/resolutions/*.md", { eager: true });
+
+function fmtDate(d: unknown): string {
+  if (!d) return "";
+  return String(d instanceof Date ? d.toISOString() : d).slice(0, 10);
+}
+
+function extractTitle(raw: string): string {
+  for (const line of raw.split("\n")) {
+    if (/^# [^#]/.test(line)) return line.slice(2).trim();
+  }
+  return "";
+}
+
+function extractSection(raw: string, keyword: string): string {
+  const lines = raw.split("\n");
+  let capturing = false;
+  const out: string[] = [];
+  for (const line of lines) {
+    if (line.startsWith("## ")) {
+      if (capturing) break;
+      if (line.toLowerCase().includes(keyword.toLowerCase())) {
+        capturing = true;
+      }
+      continue;
+    }
+    if (capturing) out.push(line);
+  }
+  return out.join("\n").replace(/<!--[\s\S]*?-->/g, "").trim();
+}
+
+type Entry = {
+  slug: string;
+  date: string;
+  author: string;
+  status: string;
+  title: string;
+  why: string;
+  businessResult: string;
+};
+
+const entries: Entry[] = Object.entries(files)
+  .filter(([p]) => !p.endsWith("README.md"))
+  .map(([p, mod]: [string, any]) => {
+    const fm = mod.frontmatter ?? {};
+    const raw: string = typeof mod.rawContent === "function" ? mod.rawContent() : "";
+    return {
+      slug: p.split("/").pop()!.replace(".md", ""),
+      date: fmtDate(fm.date),
+      author: fm.author ?? "",
+      status: fm.status ?? "draft",
+      title: extractTitle(raw) || p.split("/").pop()!.replace(".md", "").replace(/-/g, " "),
+      why: extractSection(raw, "why"),
+      businessResult: extractSection(raw, "business result"),
+    };
+  })
+  .sort((a, b) => b.date.localeCompare(a.date));
+
+const confirmed  = entries.filter(e => e.status === "confirmed");
+const pending    = entries.filter(e => e.status === "needs-confirmation");
+const today      = new Date().toISOString().slice(0, 10);
+
+const EXAMPLE_RENDERED = {
+  title:          `Hero "View resolution log" button made visible`,
+  date:           "2026-06-04",
+  author:         "Leo Moura",
+  why:            `The "View resolution log" button on the home page was invisible — it had no outline or background, so it looked like a line of grey text rather than something you could click. Anyone landing on the home page would see the purple "How it works" button and miss the resolution log entirely. The fix gives the button a subtle border so both options in the hero are clearly recognisable as interactive, while the resolution log link stays visually quieter than the primary action beside it.`,
+  businessResult: "",
+};
+
+const EXAMPLE_SOURCE = `\
+---
+work_item: ""
+pr: ""
+status: confirmed
+author: Leo Moura
+date: 2026-06-04
+---
+
+# Hero "View resolution log" button made visible
+
+## What changed
+The \`.btn-ghost\` rule in \`src/pages/index.astro\` — one border property
+added using an existing design token (\`var(--border-2)\`).
+
+## How it was done
+A single \`border: 1px solid var(--border-2)\` declaration was added to the
+existing rule. The token matches card outlines used elsewhere on the page,
+so the button fits the design language without introducing anything new.
+
+## Technical result
+The element now has a visible 1px outline at rest.
+Static build completes with no errors.
+
+## Why / what-for   <!-- confirmed -->
+The "View resolution log" button on the home page was invisible — it had no
+outline or background, so it looked like a line of grey text rather than
+something you could click. Anyone landing on the home page would see the
+purple "How it works" button and miss the resolution log entirely. The fix
+gives the button a subtle border so both options in the hero are clearly
+recognisable as interactive.`;
+
+const EXAMPLE_SPEC = `\
+# Fix Spec — Hero ghost button visibility
+
+## What needs to happen
+The "View resolution log →" element in the hero must look like a button.
+Read docs/task-problem.md for the full description.
+
+Look at .btn-ghost in src/pages/index.astro and figure out why the element
+has no visible shape at rest. Apply the minimal fix that makes it clearly
+recognisable without competing with the primary button beside it.
+
+## Acceptance criteria
+- "View resolution log →" has a visible shape at rest
+- It remains less prominent than the filled "How it works" button
+- No other elements on the page are affected
+- npm run build completes with no errors`;
+---
+
+<Base title="Resolution Report — Decobrief" description="Plain-language summary of every confirmed change — for the whole team.">
+
+  <!-- ── DISCLAIMER BANNER ── -->
+  <div class="rp-disclaimer">
+    <span class="rp-disclaimer-icon">👥</span>
+    <div>
+      <strong>Non-technical content</strong>
+      — This page is written in plain language for designers, product managers,
+      and anyone on the team who wasn't in the room. No technical background
+      required. Engineers looking for the full record with code details can use
+      the <a href="/resolutions">Dev log</a>.
+    </div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section class="rp-hero">
+    <div class="rp-hero-inner">
+      <div class="rp-audience-row">
+        <span class="rp-audience-pill rp-pill-nontech">For your team</span>
+        <span class="rp-audience-pill rp-pill-tech">For engineers</span>
+      </div>
+      <h1>What changed — and why.</h1>
+      <p class="rp-sub">
+        Every meaningful change to this project has a plain-language record:
+        what the problem was, why the decision was made, and who confirmed it.
+        No technical background required to understand it.
+      </p>
+      <div class="rp-hero-links">
+        <a href="#confirmed" class="btn-primary">See confirmed changes</a>
+        <a href="/resolutions" class="btn-ghost">Technical log →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONFIRMED — non-tech view ── -->
+  <section class="rp-section" id="confirmed">
+    <div class="rp-inner">
+      <div class="rp-section-header">
+        <span class="rp-audience-pill rp-pill-nontech">For your team</span>
+        <h2>Confirmed changes</h2>
+        <p class="rp-section-desc">
+          These changes have been reviewed by the engineer who made them.
+          The "why" below is their own words, confirmed at the moment the
+          work was finished.
+        </p>
+      </div>
+
+      {confirmed.length === 0 ? (
+        <div class="rp-empty">
+          <p class="rp-empty-icon">📋</p>
+          <p>No confirmed records yet.</p>
+          <p class="rp-empty-hint">
+            Run the demo below to create the first one, or scroll down to see
+            what a confirmed record looks like.
+          </p>
+        </div>
+      ) : (
+        <div class="rp-cards">
+          {confirmed.map(e => (
+            <div class="rp-card">
+              <div class="rp-card-meta">
+                <span class="badge badge-confirmed">confirmed</span>
+                <span class="rp-meta-date">{e.date}</span>
+                {e.author && (
+                  <span class="rp-meta-author">
+                    Confirmed by <strong>{e.author}</strong>
+                  </span>
+                )}
+              </div>
+              <h3 class="rp-card-title">{e.title}</h3>
+              {e.why && (
+                <div class="rp-why-block">
+                  <span class="rp-why-label">Why this was done</span>
+                  <p class="rp-why-text">{e.why}</p>
+                </div>
+              )}
+              {e.businessResult && (
+                <div class="rp-outcome-block">
+                  <span class="rp-outcome-label">Expected outcome</span>
+                  <p class="rp-outcome-text">{e.businessResult}</p>
+                </div>
+              )}
+              <a href={`/resolutions/${e.slug}`} class="rp-tech-link">
+                Full technical record →
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ── PENDING CONFIRMATION — engineer view ── -->
+  {pending.length > 0 && (
+    <section class="rp-section rp-section-pending" id="pending">
+      <div class="rp-inner">
+        <div class="rp-section-header">
+          <span class="rp-audience-pill rp-pill-tech">For engineers</span>
+          <h2>Waiting for your confirmation</h2>
+          <p class="rp-section-desc">
+            These changes have been documented by the agent. The proposed
+            <em>why</em> needs a human to confirm or correct it in one sentence.
+          </p>
+        </div>
+
+        <div class="rp-cards">
+          {pending.map(e => (
+            <div class="rp-card rp-card-pending">
+              <div class="rp-card-meta">
+                <span class="badge badge-needs">needs confirmation</span>
+                <span class="rp-meta-date">{e.date}</span>
+              </div>
+              <h3 class="rp-card-title">{e.title}</h3>
+
+              {e.why && (
+                <div class="rp-proposal-block">
+                  <span class="rp-proposal-label">Proposed why — agent's draft</span>
+                  <p class="rp-proposal-text">{e.why}</p>
+                </div>
+              )}
+
+              <div class="rp-confirm-how">
+                <p class="rp-confirm-title">To confirm, run in your terminal:</p>
+                <pre class="rp-confirm-code"><code>{`claude "The proposed why in docs/resolutions/${e.slug}.md is correct. \
+Set status: confirmed, author: your name, date: ${today}."`}</code></pre>
+                <p class="rp-confirm-or">Or edit the frontmatter directly:</p>
+                <pre class="rp-confirm-code"><code>{`status: confirmed\nauthor: your name\ndate: ${today}`}</code></pre>
+              </div>
+
+              <a href={`/resolutions/${e.slug}`} class="rp-tech-link">
+                View full record →
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ── HOW IT WORKS IN PRACTICE ── -->
+  <section class="rp-section rp-section-alt" id="example">
+    <div class="rp-inner">
+      <div class="rp-section-header">
+        <h2>How it works in practice</h2>
+        <p class="rp-section-desc">
+          Three documents, one workflow. Below is a real example of each — the
+          bug ticket, the fix spec, and the final resolution record shown from
+          both perspectives.
+        </p>
+      </div>
+
+      <!-- Step flow -->
+      <div class="rp-steps">
+        <div class="rp-step">
+          <div class="rp-step-num">01</div>
+          <h4>Bug ticket</h4>
+          <p>Describes the visible problem in plain language. No solution prescribed.</p>
+        </div>
+        <div class="rp-step-arrow">→</div>
+        <div class="rp-step">
+          <div class="rp-step-num">02</div>
+          <h4>Fix spec</h4>
+          <p>Describes what "done" looks like — acceptance criteria, not implementation.</p>
+        </div>
+        <div class="rp-step-arrow">→</div>
+        <div class="rp-step">
+          <div class="rp-step-num">03</div>
+          <h4>Agent fixes + documents</h4>
+          <p>Reads both files, finds the root cause, applies the fix, drafts the record.</p>
+        </div>
+        <div class="rp-step-arrow">→</div>
+        <div class="rp-step">
+          <div class="rp-step-num">04</div>
+          <h4>Human confirms why</h4>
+          <p>One sentence. Status set to confirmed. Record committed permanently.</p>
+        </div>
+      </div>
+
+      <!-- Fix spec example -->
+      <div class="rp-doc-example">
+        <div class="rp-doc-label">
+          <span class="rp-audience-pill rp-pill-tech">docs/fix-spec.md</span>
+          <span class="rp-doc-caption">Acceptance criteria — no implementation prescribed</span>
+        </div>
+        <pre class="rp-code-block"><code>{EXAMPLE_SPEC}</code></pre>
+      </div>
+
+      <!-- Resolution record — both views -->
+      <div class="rp-doc-label" style="margin-top: 3rem;">
+        <span class="rp-doc-caption" style="font-size:1rem; font-weight:600; color: var(--text);">
+          The resolution record — two views of the same file
+        </span>
+      </div>
+      <div class="rp-split">
+
+        <!-- Non-tech view -->
+        <div class="rp-split-panel">
+          <div class="rp-split-label">
+            <span class="rp-audience-pill rp-pill-nontech">Non-tech view</span>
+            <span class="rp-doc-caption">What a PM, designer, or stakeholder reads</span>
+          </div>
+          <div class="rp-card rp-card-example">
+            <div class="rp-card-meta">
+              <span class="badge badge-confirmed">confirmed</span>
+              <span class="rp-meta-date">{EXAMPLE_RENDERED.date}</span>
+              <span class="rp-meta-author">
+                Confirmed by <strong>{EXAMPLE_RENDERED.author}</strong>
+              </span>
+            </div>
+            <h3 class="rp-card-title">{EXAMPLE_RENDERED.title}</h3>
+            <div class="rp-why-block">
+              <span class="rp-why-label">Why this was done</span>
+              <p class="rp-why-text">{EXAMPLE_RENDERED.why}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Markdown source -->
+        <div class="rp-split-panel">
+          <div class="rp-split-label">
+            <span class="rp-audience-pill rp-pill-tech">Markdown source</span>
+            <span class="rp-doc-caption">What lives in docs/resolutions/ alongside the code</span>
+          </div>
+          <pre class="rp-code-block rp-code-scroll"><code>{EXAMPLE_SOURCE}</code></pre>
+        </div>
+
+      </div><!-- /rp-split -->
+    </div>
+  </section>
+
+  <!-- ── TRY IT CTA ── -->
+  <section class="rp-section rp-section-cta">
+    <div class="rp-inner rp-inner-narrow" style="text-align:center;">
+      <h2>Create your first record</h2>
+      <p class="rp-section-desc" style="margin-bottom:2rem;">
+        This project ships with a deliberate bug, a ticket, and a fix spec.
+        Ask the agent to fix it — the resolution record writes itself.
+      </p>
+      <pre class="rp-prompt-block"><code>Read the bug ticket in docs/task-problem.md and the fix spec in
+docs/fix-spec.md. Find and fix the issue in the code. Then write
+the resolution record following the agent instructions in README.md.</code></pre>
+      <div style="margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="/#how-it-works" class="btn-primary">How the workflow works</a>
+        <a href="/resolutions" class="btn-ghost">Technical log →</a>
+      </div>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  /* ── DISCLAIMER BANNER ── */
+  .rp-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: #1a3a2a;
+    border-bottom: 1px solid #22c55e33;
+    padding: 0.9rem 2rem;
+    font-size: 0.875rem;
+    color: #86efac;
+    line-height: 1.6;
+  }
+  .rp-disclaimer strong { color: #bbf7d0; }
+  .rp-disclaimer a { color: #86efac; text-decoration: underline; }
+  .rp-disclaimer a:hover { color: #fff; }
+  .rp-disclaimer-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  /* ── HERO ── */
+  .rp-hero {
+    padding: 6rem 2rem 4.5rem;
+    text-align: center;
+  }
+  .rp-hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .rp-audience-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .rp-hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    line-height: 1.1;
+  }
+  .rp-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+  .rp-hero-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── AUDIENCE PILLS ── */
+  .rp-audience-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.25em 0.75em;
+    border-radius: 999px;
+  }
+  .rp-pill-nontech {
+    background: #1a3a2a;
+    color: var(--green);
+    border: 1px solid #22c55e44;
+  }
+  .rp-pill-tech {
+    background: var(--accent-dim);
+    color: var(--accent-2);
+    border: 1px solid #6e56cf44;
+  }
+
+  /* ── SECTIONS ── */
+  .rp-section { padding: 5rem 2rem; }
+  .rp-section-alt {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .rp-section-pending {
+    background: color-mix(in srgb, #3d2200 40%, var(--bg));
+    border-top: 1px solid #3d2200;
+    border-bottom: 1px solid #3d2200;
+  }
+  .rp-section-cta { padding-bottom: 7rem; }
+  .rp-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .rp-inner-narrow { max-width: 640px; }
+
+  .rp-section-header { margin-bottom: 2.5rem; }
+  .rp-section-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0.6rem 0 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .rp-section-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* ── CONFIRMED CARDS ── */
+  .rp-cards { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .rp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+  }
+  .rp-card-pending {
+    background: color-mix(in srgb, #3d2200 30%, var(--surface));
+    border-color: #ba751744;
+  }
+  .rp-card-example {
+    background: var(--bg);
+  }
+
+  .rp-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+  }
+  .rp-meta-date {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .rp-meta-author {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .rp-meta-author strong { color: var(--text); }
+
+  .rp-card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    line-height: 1.35;
+  }
+
+  /* Why block */
+  .rp-why-block {
+    background: color-mix(in srgb, var(--accent-dim) 20%, var(--bg));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .rp-why-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-2);
+    margin-bottom: 0.5rem;
+  }
+  .rp-why-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* Outcome block */
+  .rp-outcome-block {
+    background: color-mix(in srgb, #14532d 30%, var(--bg));
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .rp-outcome-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+  }
+  .rp-outcome-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* Proposal block (pending) */
+  .rp-proposal-block {
+    background: color-mix(in srgb, #3d2200 40%, var(--bg));
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .rp-proposal-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--yellow);
+    margin-bottom: 0.5rem;
+  }
+  .rp-proposal-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.75;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* Confirm how block */
+  .rp-confirm-how {
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .rp-confirm-title {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .rp-confirm-or {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0.75rem 0 0.5rem;
+  }
+  .rp-confirm-code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent-2);
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+  }
+
+  .rp-tech-link {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .rp-tech-link:hover { color: var(--text); }
+
+  /* ── EMPTY STATE ── */
+  .rp-empty {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+  .rp-empty-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .rp-empty-hint { font-size: 0.85rem; margin-top: 0.35rem; }
+
+  /* ── HOW IT WORKS STEPS ── */
+  .rp-steps {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+  }
+  .rp-step { flex: 1; }
+  .rp-step-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent-2);
+    font-family: var(--mono);
+    margin-bottom: 0.5rem;
+  }
+  .rp-step h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.35rem;
+  }
+  .rp-step p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .rp-step-arrow {
+    color: var(--border-2);
+    font-size: 1.25rem;
+    padding-top: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ── DOC EXAMPLES ── */
+  .rp-doc-example { margin-top: 2rem; }
+  .rp-doc-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .rp-doc-caption {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .rp-code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.65;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+  }
+  .rp-code-scroll { max-height: 480px; overflow-y: auto; }
+
+  /* ── SPLIT LAYOUT ── */
+  .rp-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .rp-split-panel {}
+  .rp-split-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── PROMPT BLOCK ── */
+  .rp-prompt-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--accent-2);
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+    text-align: left;
+    margin: 0 auto;
+    max-width: 640px;
+  }
+
+  /* ── BUTTONS (reuse from index) ── */
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--border); }
+
+  @media (max-width: 768px) {
+    .rp-split  { grid-template-columns: 1fr; }
+    .rp-steps  { flex-direction: column; }
+    .rp-step-arrow { transform: rotate(90deg); align-self: center; }
+  }
+</style>

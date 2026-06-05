@@ -21,9 +21,14 @@ function badgeClass(s?: string) {
   if (s === "needs-confirmation") return "badge badge-needs";
   return "badge badge-draft";
 }
+
+function fmtDate(d: unknown): string {
+  if (!d) return "";
+  return String(d instanceof Date ? d.toISOString() : d).slice(0, 10);
+}
 ---
 
-<Base title="Resolution Log — Chronicle">
+<Base title="Resolution Log — Decobrief">
   <div class="log-page">
     <h1>Resolution Log</h1>
     <p class="subtitle">
@@ -46,7 +51,7 @@ function badgeClass(s?: string) {
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap;">
               <span class={badgeClass(r.fm.status)}>{r.fm.status ?? "draft"}</span>
               {r.fm.date && (
-                <span style="color:var(--muted); font-size:0.82rem;">{r.fm.date}</span>
+                <span style="color:var(--muted); font-size:0.82rem;">{fmtDate(r.fm.date)}</span>
               )}
               {r.fm.pr && (
                 <span style="color:var(--muted); font-size:0.82rem;">PR {r.fm.pr}</span>

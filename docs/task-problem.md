@@ -1,77 +1,59 @@
-# [BUG] Feature card CTA buttons are misaligned on the home page
+# [BUG] Resolution log shows filenames instead of record titles
 
 **Priority:** Medium  
-**Type:** Visual / UI Bug  
+**Type:** UX Bug  
 **Reported:** 2026-06-04  
-**Page:** `/` (home)  
-**Section:** "Everything your team needs" — feature cards grid
+**Page:** `/resolutions` (resolution log)  
+**Section:** Record list
 
 ---
 
 ## Description
 
-The three feature cards in the "Everything your team needs" section each end with a
-"Get started" button. Because the three card descriptions have different lengths, the
-buttons appear at different vertical positions — the card with the shortest description
-has its button sitting near the middle of the card area, while the card with the longest
-description has its button near the actual bottom edge.
+The resolution log lists every record by deriving a display name from the
+filename — replacing dashes with spaces. So instead of showing the actual
+title written inside the record, it shows something like:
 
-This breaks the visual rhythm of the row and makes the section look unfinished, as if
-the layout was not reviewed before shipping.
+> RES 001 hero ghost button visibility
+
+The real title, written at the top of that same file, is:
+
+> Hero "View resolution log" button made visible
+
+For engineers this is tolerable. For a designer, product manager, or anyone
+outside the team, the filename-derived label is meaningless noise. The log
+was built to be readable by everyone — and right now it isn't.
 
 ---
 
 ## Steps to reproduce
 
 1. Run `npm run dev` or `bun dev`
-2. Open `http://localhost:4321`
-3. Scroll down to the "Everything your team needs" section
-4. Compare the vertical position of the three "Get started" buttons across the cards
+2. Open `http://localhost:4321/resolutions`
+3. Look at the record title shown in the card
+4. Compare it to the actual title inside `docs/resolutions/RES-001-hero-ghost-button-visibility.md`
 
 ---
 
 ## Expected behaviour
 
-All three "Get started" buttons should sit flush at the bottom of their respective
-cards, regardless of how much text is in the description above them. The visual result
-should be a clean horizontal row of buttons at the same height.
+The resolution log should display the human-readable title from the first
+heading inside each record file — the same title a reader would see when
+they open the record.
 
 ---
 
 ## Actual behaviour
 
-The buttons follow the content — each one sits immediately below its description text.
-Shorter descriptions mean a higher button; longer descriptions mean a lower one. In a
-three-column grid with equal-height rows, this creates obvious vertical misalignment.
-
----
-
-## Root cause
-
-The `.feature-card` elements are rendered as standard block containers. There is no
-mechanism to push the button to the bottom edge of the card when the description is
-shorter than its neighbours.
-
-The standard fix is to make each card a flex column and give the button `margin-top: auto`,
-which distributes the remaining vertical space above the button.
+The log derives a label from the filename by replacing dashes with spaces.
+This exposes internal naming conventions (reference numbers, slug patterns)
+to readers who have no context for them.
 
 ---
 
 ## Acceptance criteria
 
-- [ ] All three "Get started" buttons sit at the same vertical position within the card row
-- [ ] The fix is resilient: changing any description to any length must not break alignment
-- [ ] No other visible elements on the page are affected by the change
-
----
-
-## Files to change
-
-- `src/pages/index.astro` — the `<style>` block inside the home page (the bug is in `.feature-card` and `.btn-card`)
-
----
-
-## Do not do
-
-- Do not change description text to force equal lengths — that is a content workaround, not a layout fix
-- Do not add a fixed `min-height` to the description `<p>` — heights will differ across viewports
+- [ ] Each card in `/resolutions` shows the title from inside the record, not the filename
+- [ ] If a record has no title, it falls back to the slug-derived label
+- [ ] The `/resolutions/[slug]` detail page is not affected
+- [ ] No other visible elements change

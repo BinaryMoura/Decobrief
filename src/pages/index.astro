@@ -2,31 +2,67 @@
 import Base from "../layouts/Base.astro";
 ---
 
-<Base title="Chronicle — Your team's decision journal">
+<Base title="Decobrief — Decode every technical decision">
 
   <!-- ─── HERO ─── -->
   <section class="hero">
     <div class="hero-inner">
-      <div class="hero-badge">Now in public beta</div>
-      <h1>Remember <em>why</em>,<br />not just what.</h1>
+      <div class="hero-badge">Open source · Works with any AI agent</div>
+      <h1>The <em>why</em> behind<br />every change.</h1>
       <p class="hero-sub">
-        Chronicle captures the reasoning behind every code change — at the only
-        moment it exists. AI drafts the record; your team confirms the why in
-        seconds.
+        Every code change leaves a diff. What it doesn't leave is a record of
+        why. Decobrief captures that reasoning — at the only moment it exists —
+        as a plain-language file committed alongside the code.
       </p>
       <div class="hero-cta">
-        <a href="#features" class="btn-primary">See what it does</a>
+        <a href="#how-it-works" class="btn-primary">How it works</a>
         <a href="/resolutions" class="btn-ghost">View resolution log →</a>
       </div>
-      <div class="hero-proof">
-        <span>Used by engineering teams at</span>
-        <div class="logo-row">
-          <span class="logo-pill">Acme</span>
-          <span class="logo-pill">Vercel Co.</span>
-          <span class="logo-pill">Stackify</span>
-          <span class="logo-pill">Meridian</span>
+    </div>
+  </section>
+
+  <!-- ─── BANNER ─── -->
+  <div class="hero-banner-wrap">
+    <img
+      src="/banner.png"
+      alt="A product manager reads a plain-language Decobrief report — 'Now I get it.' — while developers work in the background, connected by a glowing flow line."
+      class="hero-banner"
+    />
+  </div>
+
+  <!-- ─── THE PROBLEM ─── -->
+  <section class="section section-alt" id="the-problem">
+    <div class="section-inner">
+      <div class="section-label">The problem</div>
+      <h2>Knowledge decays faster than code.</h2>
+      <p class="section-sub">
+        A diff tells you what changed. It cannot tell you why.
+      </p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">📄</div>
+          <h3>Preserved forever</h3>
+          <p>
+            The diff. The commit. The ticket. Every byte of what changed is
+            in version control and searchable indefinitely.
+          </p>
+        </div>
+        <div class="problem-card problem-card-accent">
+          <div class="problem-icon">🧠</div>
+          <h3>Evaporates immediately</h3>
+          <p>
+            The reasoning. The constraint that ruled out the obvious approach.
+            The context that made this the right call. It lives only in the
+            developer's head — and starts fading the moment they move on.
+          </p>
         </div>
       </div>
+      <p class="problem-footer">
+        Six months later: a new engineer asks <em>"why did we do this?"</em> The
+        answer requires tracking down the original author, re-reading an
+        ambiguous ticket, or guessing. Decisions get re-litigated. Bugs get
+        re-introduced. Onboarding takes weeks instead of days.
+      </p>
     </div>
   </section>
 
@@ -39,15 +75,15 @@ import Base from "../layouts/Base.astro";
         <div class="step">
           <div class="step-num">01</div>
           <h3>Finish the change</h3>
-          <p>Merge a PR, close a ticket, or wrap up a session. The work is done.</p>
+          <p>Merge a PR, close a ticket, or wrap up a session with your AI agent. The work is done.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-num">02</div>
           <h3>Agent drafts the record</h3>
           <p>
-            Chronicle reads the diff and writes what changed, how, and proposes
-            a plain-English why — verified from the code.
+            The agent reads the diff and writes what changed, how it was done,
+            and proposes a plain-English <em>why</em> — verified from the code.
           </p>
         </div>
         <div class="step-arrow">→</div>
@@ -56,105 +92,148 @@ import Base from "../layouts/Base.astro";
           <h3>You confirm in one sentence</h3>
           <p>
             Read the draft. Say yes, or correct it. That is the only required
-            human step. Status set to confirmed.
+            human step. The record is committed with status set to confirmed.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── FEATURES — BUG IS HERE ─── -->
-  <!--
-    BUG: .feature-card is a block container with no flex column layout.
-    The .btn-card button has margin-top: 1.5rem, so it floats immediately
-    below the description text instead of anchoring to the card's bottom edge.
-    Cards with longer descriptions push the button further down, while cards
-    with shorter descriptions leave it near the middle — breaking horizontal
-    alignment across the three-column grid.
-  -->
-  <section class="section section-alt" id="features">
+  <!-- ─── TRUST MODEL ─── -->
+  <section class="section section-alt">
     <div class="section-inner">
-      <div class="section-label">Features</div>
-      <h2>Everything your team needs</h2>
+      <div class="section-label">The trust model</div>
+      <h2>What the agent can know — and what only you can.</h2>
       <p class="section-sub">
-        Stop losing the reasoning behind your decisions.
+        The record is only as trustworthy as this split is respected. The agent
+        must never present an unconfirmed <em>why</em> as fact.
+      </p>
+      <div class="trust-table-wrapper">
+        <table class="trust-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Who fills it</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>What changed</td>
+              <td>Agent — from the diff</td>
+              <td><span class="conf conf-high">High</span></td>
+            </tr>
+            <tr>
+              <td>How it was done</td>
+              <td>Agent — from the diff</td>
+              <td><span class="conf conf-high">High</span></td>
+            </tr>
+            <tr>
+              <td>Technical result</td>
+              <td>Agent — from tests and CI</td>
+              <td><span class="conf conf-med">Medium</span></td>
+            </tr>
+            <tr class="tr-highlight">
+              <td><strong>Why / what-for</strong></td>
+              <td><strong>Agent proposes → you confirm</strong></td>
+              <td><span class="conf conf-low">Low until confirmed</span></td>
+            </tr>
+            <tr>
+              <td>Business result</td>
+              <td>You — from the work item</td>
+              <td><span class="conf conf-human">Human only</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FEATURES ─── -->
+  <section class="section" id="features">
+    <div class="section-inner">
+      <div class="section-label">What you get</div>
+      <h2>One file. One confirmation. Long-term memory.</h2>
+      <p class="section-sub">
+        A resolution record is a single markdown file committed alongside the code — and never deleted.
       </p>
 
       <div class="features-grid">
-        <!-- Card 1 — SHORT description -->
         <div class="feature-card">
-          <div class="feature-icon">🧠</div>
-          <h3>AI-drafted records</h3>
+          <div class="feature-icon">🤖</div>
+          <h3>Works with your agent</h3>
           <p class="feature-desc">
-            The agent reads your diff and produces the record automatically.
-            No form to fill in.
+            Compatible with Claude Code, Cursor, GitHub Copilot, Windsurf, and
+            any other AI coding agent. No new tool to install — attach this README
+            and the agent knows the format.
           </p>
-          <a href="#" class="btn-card">Get started</a>
+          <a href="#how-it-works" class="btn-card">See the workflow</a>
         </div>
 
-        <!-- Card 2 — MEDIUM description -->
         <div class="feature-card">
           <div class="feature-icon">✅</div>
-          <h3>One human confirmation</h3>
+          <h3>One human step</h3>
           <p class="feature-desc">
-            The agent proposes the <em>why</em> — you confirm or correct in
-            one sentence. Low friction by design, because the only way this
-            habit sticks is if it costs less than a minute per change.
+            The agent proposes the <em>why</em>. You confirm or correct in one
+            sentence — while the reasoning is still fresh. Low friction by design,
+            because the only way this habit sticks is if it costs less than a
+            minute per change.
           </p>
-          <a href="#" class="btn-card">Get started</a>
+          <a href="#the-problem" class="btn-card">Why this matters</a>
         </div>
 
-        <!-- Card 3 — LONG description -->
         <div class="feature-card">
           <div class="feature-icon">📚</div>
           <h3>Permanent, browsable log</h3>
           <p class="feature-desc">
             Every confirmed record lives alongside your code, forever. New team
             members can trace any decision back to its origin without scheduling
-            a meeting with whoever made it — even years later. Your institutional
-            memory, finally written down in plain language instead of buried in
-            git history.
+            a meeting — even years later. Your institutional memory, finally
+            written down in plain language instead of buried in git history.
           </p>
-          <a href="#" class="btn-card">Get started</a>
+          <a href="/resolutions" class="btn-card">View resolution log</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── QUOTE ─── -->
-  <section class="section">
-    <div class="section-inner section-narrow">
-      <blockquote class="pullquote">
-        "Six months in, a new engineer joined and traced the entire auth
-        architecture to three Chronicle records — in fifteen minutes. That used
-        to take a week of meetings."
-      </blockquote>
-      <cite class="pullquote-cite">— Engineering lead, fintech startup</cite>
-    </div>
-  </section>
-
-  <!-- ─── FINAL CTA ─── -->
+  <!-- ─── RESOLUTIONS CTA ─── -->
   <section class="section section-cta">
     <div class="section-inner section-narrow" style="text-align: center;">
-      <h2>Start capturing decisions today</h2>
+      <h2>See it in action</h2>
       <p class="section-sub">
-        Works with Claude Code, Cursor, GitHub Copilot, Windsurf — any AI
-        agent. No new tool to install.
+        This project uses Decobrief on itself. Every meaningful change has a
+        resolution record — drafted by the agent, confirmed in plain language by
+        the engineer who made it.
       </p>
-      <a href="#" class="btn-primary">Get started free</a>
+      <a href="/resolutions" class="btn-primary btn-large">Browse the resolution log →</a>
     </div>
   </section>
 
 </Base>
 
 <style>
+  /* ── HERO BANNER ── */
+  .hero-banner-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+  .hero-banner {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    display: block;
+  }
+
   /* ── HERO ── */
   .hero {
     padding: 7rem 2rem 5rem;
     text-align: center;
   }
   .hero-inner {
-    max-width: 700px;
+    max-width: 680px;
     margin: 0 auto;
   }
   .hero-badge {
@@ -193,7 +272,6 @@ import Base from "../layouts/Base.astro";
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 3.5rem;
   }
   .btn-primary {
     background: var(--accent);
@@ -206,43 +284,20 @@ import Base from "../layouts/Base.astro";
     transition: opacity 0.15s;
   }
   .btn-primary:hover { opacity: 0.85; }
+  .btn-primary.btn-large {
+    font-size: 1.05rem;
+    padding: 0.85rem 2rem;
+  }
   .btn-ghost {
     color: var(--muted);
     font-size: 0.95rem;
     text-decoration: none;
     padding: 0.7rem 1rem;
+    border: 1px solid var(--border-2);
     border-radius: 8px;
-    transition: color 0.15s;
+    transition: color 0.15s, border-color 0.15s;
   }
-  .btn-ghost:hover { color: var(--text); }
-  .hero-proof {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-proof > span {
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-  }
-  .logo-row {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .logo-pill {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 0.3em 0.9em;
-    border-radius: 6px;
-    letter-spacing: 0.02em;
-  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--border); }
 
   /* ── SECTIONS ── */
   .section {
@@ -284,6 +339,50 @@ import Base from "../layouts/Base.astro";
     margin-bottom: 3rem;
   }
 
+  /* ── PROBLEM ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .problem-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .problem-card-accent {
+    border-color: var(--accent-dim);
+    background: color-mix(in srgb, var(--accent-dim) 20%, var(--bg));
+  }
+  .problem-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.85rem;
+  }
+  .problem-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .problem-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .problem-footer {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.75;
+    border-left: 3px solid var(--border-2);
+    padding-left: 1.25rem;
+  }
+  .problem-footer em {
+    color: var(--text);
+    font-style: normal;
+  }
+
   /* ── HOW IT WORKS STEPS ── */
   .steps {
     display: flex;
@@ -320,6 +419,47 @@ import Base from "../layouts/Base.astro";
     flex-shrink: 0;
   }
 
+  /* ── TRUST TABLE ── */
+  .trust-table-wrapper {
+    overflow-x: auto;
+  }
+  .trust-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .trust-table th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .trust-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .tr-highlight td {
+    background: color-mix(in srgb, var(--accent-dim) 25%, transparent);
+  }
+  .conf {
+    display: inline-block;
+    padding: 0.2em 0.65em;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .conf-high   { background: #14532d; color: var(--green); }
+  .conf-med    { background: #3d2200; color: var(--yellow); }
+  .conf-low    { background: #3d1500; color: #fb923c; }
+  .conf-human  { background: var(--surface-2); color: var(--muted); }
+
   /* ── FEATURE CARDS ── */
   .features-grid {
     display: grid;
@@ -327,12 +467,9 @@ import Base from "../layouts/Base.astro";
     gap: 1.5rem;
   }
   .feature-card {
-    /*
-     * BUG: this element needs display: flex; flex-direction: column
-     * Without it, .btn-card cannot use margin-top: auto to anchor itself
-     * to the card's bottom edge — it just floats below the description text.
-     */
-    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 2rem;
@@ -351,16 +488,14 @@ import Base from "../layouts/Base.astro";
     font-size: 0.9rem;
     color: var(--muted);
     line-height: 1.65;
+    flex: 1;
   }
   .btn-card {
-    /*
-     * BUG: should be margin-top: auto (after making the parent a flex column)
-     * Currently uses a fixed top margin, so the button position depends on
-     * how much text is above it instead of anchoring to the card bottom.
-     */
     display: inline-block;
-    margin-top: 1.5rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
     padding: 0.55rem 1.25rem;
+    margin-top: auto;
     background: var(--surface-2);
     border: 1px solid var(--border-2);
     border-radius: 7px;
@@ -369,6 +504,7 @@ import Base from "../layouts/Base.astro";
     font-weight: 500;
     text-decoration: none;
     transition: border-color 0.15s, background 0.15s;
+    align-self: flex-start;
   }
   .btn-card:hover {
     background: var(--accent-dim);
@@ -376,24 +512,9 @@ import Base from "../layouts/Base.astro";
     color: #fff;
   }
 
-  /* ── QUOTE ── */
-  .pullquote {
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--text);
-    line-height: 1.7;
-    border-left: 3px solid var(--accent);
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  .pullquote-cite {
-    font-size: 0.85rem;
-    color: var(--muted);
-    padding-left: 1.5rem;
-  }
-
   @media (max-width: 768px) {
     .features-grid { grid-template-columns: 1fr; }
+    .problem-grid  { grid-template-columns: 1fr; }
     .steps { flex-direction: column; }
     .step-arrow { transform: rotate(90deg); align-self: center; }
   }

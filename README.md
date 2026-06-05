@@ -1,6 +1,8 @@
-# Decodebrief
+# Decobrief
 
 > Decode every technical decision into plain language — for everyone who wasn't in the room.
+
+![Decobrief — plain-language reports connecting developers and non-technical teams](public/banner.png)
 
 ---
 
@@ -12,7 +14,7 @@ Six months later, when someone asks "why did we do this?" or "can we safely chan
 
 ### Why knowledge decays faster than code
 
-![Diagram: why knowledge decays over time](public/diagrams/diagram-why-decay.png)
+![Diagram: why knowledge decays over time](public/diagrams/diagram-why-decay.svg)
 
 *What* a change does is preserved in the diff forever. *Why* it was made is only fully known at the moment of the change — and decays rapidly from there. Waiting even one sprint to capture it means capturing a pale copy.
 
@@ -26,7 +28,7 @@ The key insight: an AI agent can verify the first three fields directly from the
 
 ### The full workflow
 
-![Diagram: resolution capture flow](public/diagrams/diagram-flow.png)
+![Diagram: resolution capture flow](public/diagrams/diagram-flow.svg)
 
 1. Developer finishes a change and says "write the resolution record."
 2. Agent reads the diff, drafts what changed / how / technical result.
@@ -38,7 +40,7 @@ The entire process adds less than 90 seconds to any change.
 
 ### What the agent can know vs. what only the human can
 
-![Diagram: fidelity split between agent and human](public/diagrams/diagram-fidelity-split.png)
+![Diagram: fidelity split between agent and human](public/diagrams/diagram-fidelity-split.svg)
 
 | Field | Who fills it | Source | Confidence |
 |---|---|---|---|
@@ -49,6 +51,25 @@ The entire process adds less than 90 seconds to any change.
 | Business result | Human | the work item's success criterion | The agent cannot know this |
 
 The record is only as trustworthy as this split is respected. The agent must never present an unconfirmed *why* as fact.
+
+---
+
+## The fix spec
+
+Before writing any code, engineers often write a short **fix spec**: a plain description of what "done" looks like — acceptance criteria, constraints, which areas to look at — without prescribing the implementation.
+
+The spec sits between the bug ticket and the actual code change. It is not part of the Decobrief workflow (which starts after the change is made), but it feeds directly into it: when the agent reads the spec alongside the diff, it has richer context for proposing the *why* and the technical approach.
+
+A good fix spec answers:
+- What does the user experience look like when this is fixed?
+- What are the acceptance criteria?
+- What should not change?
+
+A good fix spec does **not** contain:
+- The implementation (which CSS property to add, which function to call)
+- The solution approach — that is the agent's job to discover from the code
+
+This separation is what keeps the Decobrief record honest. If the spec already contains the answer, the agent is executing instructions, not reasoning about the problem. The resolution record captures *why a decision was made*, and that only has value if the decision was actually made — not handed over pre-written.
 
 ---
 
@@ -81,7 +102,8 @@ Collect what you can, in this order of reliability:
 2. If there is no git or no diff available: the current contents of the files the developer points you at, and what changed in this session.
 3. Commit messages, branch name, PR title/description.
 4. The conversation itself — if the change was made with you, the reasoning may already be here.
-5. A linked ticket, **only if** the project uses a tracker (see "Optional: tracker input"). Never assume one exists.
+5. A fix spec, **if one exists** — read the acceptance criteria and constraints as context for what the engineer was trying to achieve. Do not copy the spec into the record; use it to inform the *why*.
+6. A linked ticket, **only if** the project uses a tracker (see "Optional: tracker input"). Never assume one exists.
 
 #### Step 2 — Draft five fields, split by who can know them
 
@@ -92,7 +114,7 @@ Fill each field according to how confidently it can be known. Never let a guess 
 | What changed | You (the agent) | the diff / files | high — it is in the code |
 | How it was done | You | the diff / files | high — the approach is visible |
 | Technical result | You | tests, CI, measured numbers | medium — state only what you can verify |
-| Why / what-for | You **propose**, human **confirms** | ticket + branch + inference | low — you are guessing until confirmed |
+| Why / what-for | You **propose**, human **confirms** | ticket + spec + inference | low — you are guessing until confirmed |
 | Business result | Human | the work item's success criterion | you cannot know this |
 
 Honesty rules — these are what keep the record trustworthy:
@@ -100,7 +122,7 @@ Honesty rules — these are what keep the record trustworthy:
 - **Proportionality.** A one-line fix did not "overhaul" or "revolutionize" anything. Describe the change at its true scale. Inflated language is the most common failure here.
 - **No invented results.** Only state a technical result you can verify — a test that passed, a benchmark you ran, a number in the diff. Do not assert behavior the code does not demonstrate.
 - **Separate technical result from business result.** "Latency dropped 30%" is a technical result you can extract now. "Completion rate above 40% in week one" is a business outcome that resolves later — record it only as a *reference* to the work item's success criterion, never as something you measured.
-- **The why is always a proposal.** Even when a ticket exists, write the why as a proposal marked `needs-confirmation`. Tickets are rarely clean statements of intent, and the human confirmation is the single most valuable step in the cycle. Never present an unconfirmed why as fact — that is worse than an obvious placeholder.
+- **The why is always a proposal.** Even when a ticket and spec exist, write the why as a proposal marked `needs-confirmation`. The human confirmation is the single most valuable step in the cycle. Never present an unconfirmed why as fact.
 - **Plain language throughout.** Write every section — especially the why — as if explaining to someone who was not in the room when the decision was made. Avoid jargon. A future reader may not be an engineer.
 
 #### Step 3 — Write the record
@@ -180,26 +202,67 @@ With no tracker, leave `work_item` empty. Nothing breaks.
 
 ## Try it
 
-This repository is a working example of decodebrief in action.
-
-![docs/ folder structure](public/docs-structure.svg)
+This repository ships with **two tasks**: one already resolved (to show the full cycle),
+and one open (for you to run yourself).
 
 | File | Purpose |
 |---|---|
-| `src/pages/index.astro` | Chronicle landing page — has a deliberate UI alignment bug in the feature cards section |
-| `docs/task-problem.md` | Developer bug ticket describing the alignment issue |
-| `docs/fix-spec.md` | Fix specification ready for the agent to execute |
-| `docs/resolutions/` | Empty — the agent creates a record here after the fix |
+| `docs/task-problem.md` | Bug ticket for the **open task** — describes the problem, no solution |
+| `docs/fix-spec.md` | Fix spec for the open task — acceptance criteria only |
+| `docs/resolutions/` | Resolution records — one already confirmed, one to be created |
 | `scripts/check-resolutions.py` | Merge-gate checker |
 
-**Demo flow:**
+---
 
-1. Run `npm run dev` (or `bun dev`) and scroll to the feature cards — the three "Get started" buttons are visibly misaligned
-2. Read the bug ticket: `docs/task-problem.md`
-3. Ask the agent: *"Execute the fix spec in `docs/fix-spec.md`. After the fix is verified, write the resolution record following the agent instructions in this README."*
-4. The agent fixes the CSS, then drafts the resolution record
-5. Confirm the *why* in one sentence
-6. Run `npm run check-resolutions` (or `bun run check-resolutions`) — it should exit 0
+### Task 1 — Already resolved (example)
+
+The first change this project captured: the "View resolution log →" button in the hero
+was invisible — no border, no background, indistinguishable from plain text.
+
+The agent found the missing `border` in `.btn-ghost`, applied the fix, drafted the
+record, and asked for confirmation of the *why*. The confirmed record lives at
+`docs/resolutions/RES-001-hero-ghost-button-visibility.md`.
+
+**Before and after:**
+
+![Hero before the fix — the secondary CTA looks like plain text](public/screenshots/hero-before-fix.png)
+
+![Hero after the fix — both CTAs are visually distinct](public/screenshots/hero-after-fix.png)
+
+**What the agent interaction looked like:**
+
+![Agent applies the fix and proposes the why for confirmation](public/screenshots/agent-applies-fix.png)
+
+**Merge gate passing after confirmation:**
+
+![check-resolutions output: All 1 resolution record(s) confirmed](public/screenshots/check-resolutions-passing.png)
+
+---
+
+### Task 2 — Open (try it yourself)
+
+The resolution log at `/resolutions` shows record titles derived from filenames
+(`RES 001 hero ghost button visibility`) instead of the human-readable title from
+inside the file (`Hero "View resolution log" button made visible`). Unreadable for
+anyone outside engineering.
+
+The bug ticket is at `docs/task-problem.md`. The fix spec with acceptance criteria
+is at `docs/fix-spec.md`.
+
+Run this prompt in your AI coding agent:
+
+```
+Read the bug ticket in docs/task-problem.md and the fix spec in docs/fix-spec.md.
+Find and fix the issue in the code. Then write the resolution record following
+the agent instructions in README.md.
+```
+
+The agent will read the spec, look at the code, find the root cause, apply the fix,
+and draft a resolution record. Confirm the *why* in one sentence, then run:
+
+```bash
+npm run check-resolutions   # should exit 0
+```
 
 ---
 
@@ -223,4 +286,4 @@ bun run check-resolutions
 
 ## The one idea, in a sentence
 
-Every technical change leaves a diff that engineers can read. decodebrief adds the one thing the diff cannot contain: a plain-language explanation of *why* — drafted by the agent, confirmed by the engineer in one sentence, readable by everyone.
+Every technical change leaves a diff that engineers can read. Decobrief adds the one thing the diff cannot contain: a plain-language explanation of *why* — drafted by the agent, confirmed by the engineer in one sentence, readable by everyone.
